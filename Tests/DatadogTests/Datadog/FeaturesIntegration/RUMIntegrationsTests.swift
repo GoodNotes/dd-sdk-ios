@@ -31,7 +31,7 @@ class RUMIntegrationsTests: XCTestCase {
         XCTAssertValidRumUUID(attributes["view.id"] as? String)
     }
 
-    func testGivenRUMMonitorRegistered_whenSessionIsSampled_itProvidesEmptyRUMContextAttributes() throws {
+    func testGivenRUMMonitorRegistered_whenSessionRejectedBySampler_itProvidesEmptyRUMContextAttributes() throws {
         RUMFeature.instance = RUMFeature(
             eventsMapper: .mockNoOp(),
             storage: FeatureStorage(
@@ -40,7 +40,7 @@ class RUMIntegrationsTests: XCTestCase {
                 arbitraryAuthorizedWriter: NoOpFileWriter()
             ),
             upload: FeatureUpload(uploader: NoOpDataUploadWorker()),
-            configuration: .mockWith(sessionSamplingRate: 0.0),
+            configuration: .mockWith(sessionSampler: .mockRejectAll()),
             commonDependencies: .mockAny(),
             vitalCPUReader: SamplingBasedVitalReaderMock(),
             vitalMemoryReader: SamplingBasedVitalReaderMock(),
